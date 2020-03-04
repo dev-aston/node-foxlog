@@ -21,6 +21,12 @@ The default threshold value is 10, and can be overrided by environment variables
 # Getting Started
 ## Installation
 
+Make sure you have node.js ans npm installed. Then in this directory :
+
+    # To install dependencies
+    npm install
+
+
 ## Env variables
 The default access.log file parsed is /tmp/access.log.
 You can override this location by passing ENV variable to the app
@@ -35,10 +41,7 @@ For testing purposes, a routine has been added to populate the access.log consis
 You can enable it by passing the POPULATE_LOGS env variable.
 
 ## Run localy
-Make sure you have node.js ans npm installed. Then in this directory :
 
-    # To install dependencies
-    npm install
     # Run app
     npm start
 
