@@ -1,0 +1,202 @@
+<html>
+  <head>
+    <title>Logfox.io</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+    <div id="app-fox">
+      <main class="main">
+        <div class="stats">
+          <h3>Stats</h3>
+          <h4>Average <span :class="avgClass">{{avg}}</span> req/s for the last {{config && config.refreshInterval}} seconds</h4>
+          <table>
+            <tr>
+              <th>Section</th>
+              <th>Visits</th>
+              <th>Error ratio</th>
+            </tr>
+            <tr v-for="(s, k) in sortedStats" :key="s.section">
+              <td class="section">{{s.section}}</td>
+              <td>{{s.visits}}</td>
+              <td>{{ratio(s)}}%</td>
+            </tr>
+          </table>
+          <h3>Foxlog configuration</h3>
+          <pre>{{config}}</pre>
+        </div>
+
+        <div class="alerts">
+          <h3>Alerts ({{sortedAlerts.length}})</h2>
+          <h4>Threshold : {{config && config.alertThreshold}}</h4>
+          <table>
+            <tr>
+              <th>Message</th>
+              <th>Hits</th>
+              <th>Date</th>
+            </tr>
+            <tr v-for="a in sortedAlerts" :key="a.date" :class="a.type">
+              <td>{{alertMsg(a)}}</td>
+              <td >{{a.avg}}</td>
+              <td>{{dateFormat(a.date)}}</td>
+            </tr>
+          </table>
+        </div>
+      </main>
+    </div>
+    <script>
+      var appFox = new Vue({
+        el: '#app-fox',
+        data() {
+          return {
+            config: null,
+            avg: null,
+            threshold: null,
+            stats: null,
+            alerts: null
+          };
+        },
+        computed: {
+          avgClass() {
+            return (this.config && this.avg >= this.config.alertThreshold) ? 'alert' : 'success';
+          },
+          sortedAlerts() {
+            const vm = this;
+            if (!vm.alerts) return [];
+
+            return vm.alerts.reverse();
+          },
+          sortedStats() {
+            const vm = this;
+            if (!vm.stats) {
+              return [];
+            }
+            return vm.stats._sorted.map(k => {
+              return Object.assign(vm.stats[k], { section: k });
+            });
+          }
+        },
+        created() {
+          const vm = this;
+          var socket = io();
+
+          socket.on('report', (data) => {
+            vm.config = data.config;
+            vm.avg = data.avg;
+            vm.threshold = data.threshold;
+            vm.alerts = data.alerts;
+            vm.stats = data.stats;
+          });
+        },
+        methods: {
+          alertMsg(a) {
+            let prefix = (a.type === 'overload' ? 'High' : 'Low');
+            return `${prefix} traffic generated an alert - hits = ${a.avg}`;
+          },
+          dateFormat(date) {
+            return dayjs(date).format('DD-MM-YYYY HH:mm:ss');
+          },
+          ratio(stat) {
+            return Math.round(10000 * stat.errors / stat.visits) / 100;
+          }
+        }
+      })
+    </script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    
+      body {
+        font: 16px Helvetica, Arial;
+      }
+    
+      .main {
+        display: flex;
+        flex-wrap: row;
+        height: 100vh;
+        width: 100%;
+      }
+    
+      .main .stats {
+        height: 100%;
+        background-color: #eee;
+        color: #333;
+        padding: 2rem;
+        width: 100%;
+      }
+    
+      .main .alerts {
+        height: 100%;
+        background-color: #333;
+        color: #fca000;
+        padding: 2rem;
+        width: 100%;
+        overflow: scroll;
+      }
+    
+      table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+      }
+    
+      .main .stats table {
+        border: 1px solid #333;
+      }
+    
+      .main .alerts table {
+        border: 1px solid #eee;
+        color: #333;
+      }
+    
+      table th {
+        padding: 1rem;
+      }
+    
+      .main .stats th {
+        color: #fca000;
+        background-color: #333;
+      }
+    
+      .main .alerts th {
+        color: #fca000;
+      }
+    
+      table td {
+        padding: .4rem;
+        text-align: center;
+      }
+    
+      table td.secion {
+        font-weight: bold;
+      }
+    
+      tr.overload {
+        background-color: #f47c7c;
+      }
+    
+      tr.recovery {
+        background-color: #a1de93;
+      }
+    
+      tr th:first-child,
+      tr td:first-child {
+        text-align: left;
+        padding-left: 1rem;
+      }
+      .alert {
+        color: #f47c7c;
+      }
+      .success {
+        color: #a1de93;
+      }
+    </style>
+  </body>
+</html>
+

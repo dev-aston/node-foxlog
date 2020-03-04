@@ -24,6 +24,7 @@ The default threshold value is 10, and can be overrided by environment variables
 ## Env variables
 The default access.log file parsed is /tmp/access.log.
 You can override this location by passing ENV variable to the app
+
     # Passing LOG_PATH env variable
     LOG_PATH="/path/to/access/log/file" npm start
     # Passing ALERT_THRESHOLD env variable
@@ -35,6 +36,7 @@ You can enable it by passing the POPULATE_LOGS env variable.
 
 ## Run localy
 Make sure you have node.js ans npm installed. Then in this directory :
+
     # To install dependencies
     npm install
     # Run app
@@ -63,6 +65,7 @@ You can access the report web page at the address : http://localhost:3000
 
 ## Run in Docker
 You can build a docker image to run the app in a container.
+
     # Build the app
     docker build -t <tag> .
     # Run the container
@@ -73,6 +76,7 @@ You can refer to the [Docker documentation](https://docs.docker.com/engine/refer
 
 ### Console output in docker
 You can monitor the console output in the container
+
     # Log container output
     docker logs -f <cotainer_id>
 
@@ -80,8 +84,22 @@ You can monitor the console output in the container
 If you choose to redirect a local port to the container, you can access the report page on http://localhost:<local_port>
 
 ## Test
+
     # To install mocha
     npm install -g mocha
+
 Then in this directory :
+
     # Run tests with mocha
     mocha
+
+## Follow Up
+### Data
+Data is not stored in any database what so ever, nor visualized over time.
+A TSBD like [InfluxDB](https://www.influxdata.com/products/influxdb-overview/) could be used along with a graph tool such as [grafana](https://grafana.com/) to provide a better reporting plateform.
+
+More data could be used or displayed in the stats (source IP...)
+
+### Services
+This app could be part of a monitoring infrastructure.
+Having it warn a load balancer for example to scale in realtime.
