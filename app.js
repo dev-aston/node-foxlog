@@ -9,8 +9,6 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-// require('./lib/socket')(io);
-
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
@@ -47,9 +45,8 @@ io.on('connection', () => {
 });
 
 // Dummy log populater
-console.log('popLogs', process.env.POPULATE_LOGS, !!process.env.POPULATE_LOGS);
-
 if (process.env.POPULATE_LOGS) {
+  console.log('Populate routine enabled !');
   setInterval(() => {
     tools.populateLog(logFile);
   }, 1000);

@@ -17,14 +17,14 @@ describe('Message formating', function () {
 
 describe('Traffic alerts mechanism', function () {
   it('High traffic alert', function () {
-    assert.deepEqual(tools.buildAlert(avgs.overload, threshold, null), 'overload');
-    assert.deepEqual(tools.buildAlert(avgs.overload, threshold, 'recovery'), 'overload');
-    assert.deepEqual(tools.buildAlert(avgs.overload, threshold, 'overload'), undefined);
+    assert.deepEqual(tools.checkAlert(avgs.overload, threshold, null), 'overload');
+    assert.deepEqual(tools.checkAlert(avgs.overload, threshold, 'recovery'), 'overload');
+    assert.deepEqual(tools.checkAlert(avgs.overload, threshold, 'overload'), undefined);
   });
 
   it('Low traffic alert', function () {
-    assert.deepEqual(tools.buildAlert(avgs.recovery, threshold, 'overload'), 'recovery');
-    assert.deepEqual(tools.buildAlert(avgs.recovery, threshold, 'recovery'), undefined);
-    assert.deepEqual(tools.buildAlert(avgs.recovery, threshold, null), undefined);
+    assert.deepEqual(tools.checkAlert(avgs.recovery, threshold, 'overload'), 'recovery');
+    assert.deepEqual(tools.checkAlert(avgs.recovery, threshold, 'recovery'), undefined);
+    assert.deepEqual(tools.checkAlert(avgs.recovery, threshold, null), undefined);
   });
 });
