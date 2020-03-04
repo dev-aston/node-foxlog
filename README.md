@@ -96,7 +96,7 @@ Then in this directory :
 ## Follow Up
 ### Data
 Data is not stored in any database what so ever, nor visualized over time.
-A TSBD like InfluxDB could be used along with a graph tool such as grafana to provide a better reporting plateform.
+A TSBD like [InfluxDB](https://www.influxdata.com/products/influxdb-overview/) could be used along with a graph tool such as [grafana](https://grafana.com/) to provide a better reporting plateform.
 
 More data could be used or displayed in the stats (source IP...)
 
