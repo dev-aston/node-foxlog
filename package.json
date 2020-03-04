@@ -1,0 +1,25 @@
+{
+  "name": "node-foxlog",
+  "version": "0.0.1",
+  "description": "Code for a access.log parser",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "devDependencies": {
+    "mocha": "~1.17",
+    "babel-eslint": "^8.2.1",
+    "chalk": "^2.3.0",
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-html": "^4.0.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "socket.io": "^2.3.0"
+  }
+}
